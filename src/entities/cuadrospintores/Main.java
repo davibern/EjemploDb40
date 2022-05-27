@@ -1,12 +1,12 @@
-package main;
+package entities.cuadrospintores;
 
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.query.Constraint;
 import com.db4o.query.Query;
 import db.CuadroPintoresDb4o;
-import entities.Cuadro;
-import entities.Pintor;
+import entities.cuadrospintores.Cuadro;
+import entities.cuadrospintores.Pintor;
 
 /**
  *

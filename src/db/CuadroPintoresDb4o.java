@@ -3,7 +3,7 @@ package db;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.config.EmbeddedConfiguration;
-import entities.Cuadro;
+import entities.cuadrospintores.Cuadro;
 import java.io.File;
 
 /**
