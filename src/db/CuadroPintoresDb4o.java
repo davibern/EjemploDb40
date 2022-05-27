@@ -11,7 +11,7 @@ import java.io.File;
  * @author davibern
  * @version 1.0
  */
-public class BaseDatosDb4o {
+public class CuadroPintoresDb4o {
     
     private static final String BASE_DE_DATOS = "cuadros.db40";
     private static ObjectContainer db = null;

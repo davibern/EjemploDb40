@@ -4,7 +4,7 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.query.Constraint;
 import com.db4o.query.Query;
-import db.BaseDatosDb4o;
+import db.CuadroPintoresDb4o;
 import entities.Cuadro;
 import entities.Pintor;
 
@@ -27,7 +27,7 @@ public class Main {
     private static final Cuadro cuadro6 = new Cuadro("Margret", pintor3, "óleo", 100, 130);
  
     public static void main(String[] args) {
-        db = BaseDatosDb4o.crear();
+        db = CuadroPintoresDb4o.crear();
         
         try {
             mensaje("Almacenar cuadros y pintores");
@@ -51,7 +51,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         } finally {
-            BaseDatosDb4o.cerrar();
+            CuadroPintoresDb4o.cerrar();
         }
     }
     
