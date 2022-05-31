@@ -31,9 +31,9 @@ public class Main {
         try {
             System.out.println("Almacenar Ponentes y Charlas\n------------------------");
             almacenarDatos(db);
-            System.out.println("Mostrar Ponenntes\n------------------------");
+            System.out.println("Mostrar Ponentes\n------------------------");
             consultaPonentes(db);
-            System.out.println("Mostrar Ponenntes de cache 200\n------------------------");
+            System.out.println("Mostrar Ponentes de cache 200\n------------------------");
             consultaPonentes200(db);
             System.out.println("Mostrar Ponenntes por nombre\n------------------------");
             consultaPonenteNombre(db, "Pedro Sánchez");
@@ -49,6 +49,14 @@ public class Main {
             actualizarEmailCliente(db, "11A", "email.nuevo@gmail.com");
             System.out.println("Eliminar ponente\n---------------------");
             eliminarPonenteNif(db, "11A");
+            System.out.println("Mostrar Charlas\n------------------------");
+            consultaCharlas(db);
+            System.out.println("Mostrar Charlas usando SODA por título\n------------------------");
+            consultaSODACharlaTitulo(db, "Java II");
+            System.out.println("Eliminar Charlas por titulo\n---------------------");
+            eliminarCharlaTitulo(db, "Db4o");
+            System.out.println("Actualizar horario de Charla\n---------------------");
+            actualizarHorasCharla(db, "Java II", 3);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         } finally {
@@ -151,5 +159,47 @@ public class Main {
         ObjectSet result = db.queryByExample(new Ponente(nif, null, null, 0));
         Ponente ponente = (Ponente) result.next();
         db.delete(ponente);
+    }
+    
+    // Consultas de Charlas
+    public static void consultaCharlas(ObjectContainer db) {
+        Charla charla = new Charla(null, 0);
+        ObjectSet result = db.queryByExample(charla);
+        mostrarConsulta(result);
+    }
+    
+    public static void consultaSODACharlaTitulo(ObjectContainer db, String titulo) {
+        Query query = db.query();
+        query.constrain(Charla.class);
+        query.descend("titulo").constrain(titulo);
+        ObjectSet result = query.execute();
+        mostrarConsulta(result);
+    }
+    
+    public static void consultaCharlaPonente(ObjectContainer db, String ponente) {
+        Ponente p = new Ponente(null, ponente, null, 0);
+        Charla c = new Charla(null, 0);
+        c.setPonente(p);
+        ObjectSet result = db.queryByExample(c);
+        mostrarConsulta(result);
+    }
+    
+    public static void eliminarCharlaTitulo(ObjectContainer db, String titulo) {
+        Query query = db.query();
+        query.constrain(Charla.class);
+        query.descend("titulo").constrain(titulo);
+        ObjectSet result = query.execute();
+        while (result.hasNext()) {
+            Charla c = (Charla) result.next();
+            System.out.println("Eliminado: " + c);
+            db.delete(c);
+        }
+    }
+    
+    public static void actualizarHorasCharla(ObjectContainer db, String titulo, float hora) {
+        ObjectSet result = db.queryByExample(new Charla(titulo, 0));
+        Charla c = (Charla) result.next();
+        c.setDuracion(hora);
+        db.store(c);
     }
 }
