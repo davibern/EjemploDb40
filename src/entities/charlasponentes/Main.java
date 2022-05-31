@@ -3,8 +3,10 @@ package entities.charlasponentes;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.query.Constraint;
+import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 import db.CharlaPintoresDb4o;
+import java.util.List;
 
 /**
  *
@@ -41,6 +43,12 @@ public class Main {
             consultaSODACache200(db);
             System.out.println("Mostrar Ponenntes usando SODA de cache 50 a 200\n------------------------");
             consutlaSODACache50Y500(db);
+            System.out.println("Consultar Ponentes NQ por caché\n---------------------");
+            consultaPonenteNQCache200(db);
+            System.out.println("Actualizar email de ponente\n---------------------");
+            actualizarEmailCliente(db, "11A", "email.nuevo@gmail.com");
+            System.out.println("Eliminar ponente\n---------------------");
+            eliminarPonenteNif(db, "11A");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         } finally {
@@ -76,6 +84,7 @@ public class Main {
         }
     }
     
+    // Consultas de Ponentes
     public static void consultaPonentes(ObjectContainer db) {
         Ponente ponente = new Ponente(null, null, null, 0);
         ObjectSet result = db.queryByExample(ponente);
@@ -116,5 +125,31 @@ public class Main {
         query.descend("cache").constrain(50).greater().and(constraint);
         ObjectSet result = query.execute();
         mostrarConsulta(result);
+    }
+    
+    public static void consultaPonenteNQCache200(ObjectContainer db) {
+        List res = db.query(new Predicate() {
+            public boolean match(Ponente p) {
+                return p.getCache() == 200;
+            }
+            
+            @Override
+            public boolean match(Object et) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+        });
+    }
+    
+    public static void actualizarEmailCliente(ObjectContainer db, String nif, String email) {
+        ObjectSet result = db.queryByExample(new Ponente(nif, null, null, 0));
+        Ponente ponente = (Ponente) result.next();
+        ponente.setEmail(email);
+        db.store(db);
+    }
+    
+    public static void eliminarPonenteNif(ObjectContainer db, String nif) {
+        ObjectSet result = db.queryByExample(new Ponente(nif, null, null, 0));
+        Ponente ponente = (Ponente) result.next();
+        db.delete(ponente);
     }
 }
